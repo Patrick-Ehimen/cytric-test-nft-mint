@@ -11,9 +11,6 @@ export default function Navbar() {
         <div className="flex items-center">
           <Image src={Logo} width={40} height={40} alt="logo" />
         </div>
-        {/* <Button className="bg-[#E559F9] hover:bg-[#E559F9]/90 text-white rounded-full px-6">
-          Connect Wallet
-        </Button> */}
         <ConnectButton
           accountStatus={{
             smallScreen: "avatar",

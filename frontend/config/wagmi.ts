@@ -1,17 +1,7 @@
 // Importing the default configuration from RainbowKit
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 // Importing various blockchain networks from Wagmi
-import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  bsc,
-  avalanche,
-  sepolia,
-  avalancheFuji,
-} from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 // Importing various wallet options from RainbowKit
 import {
   phantomWallet,
@@ -54,21 +44,7 @@ export const config = getDefaultConfig({
   // Setting the project ID from environment variables
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID || "",
   // Defining the blockchain networks to support
-  chains: [
-    mainnet,
-    arbitrum,
-    optimism,
-    polygon,
-    base,
-    bsc,
-    avalanche,
-    sepolia,
-    avalancheFuji,
-    // Conditionally adding Sepolia network if testnets are enabled
-    // ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
-    //   ? [sepolia, avalancheFuji]
-    //   : []),
-  ],
+  chains: [sepolia],
   // Enabling server-side rendering
   ssr: true,
   // Setting the wallet options
