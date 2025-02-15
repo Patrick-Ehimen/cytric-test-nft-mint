@@ -37,6 +37,11 @@ export default function MintNFT() {
   });
   const [storedNFT, setStoredNFT] = useState<NFTData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   // Generate a random token ID (number between 1 and 1,000,000)
   const generateRandomTokenId = (): number => {
@@ -99,6 +104,7 @@ export default function MintNFT() {
     setError(null);
 
     const tokenId = generateRandomTokenId();
+    setTokenId(tokenId);
 
     const nftData: NFTData = {
       nftId: tokenId,
@@ -146,6 +152,8 @@ export default function MintNFT() {
       setLoading(false);
     }
   };
+
+  if (!hasMounted) return null;
 
   if (isSuccess && storedNFT) {
     return (
