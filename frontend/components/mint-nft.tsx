@@ -24,6 +24,7 @@ export default function MintNFT() {
   const { writeContract } = useWriteContract();
   const [tokenId, setTokenId] = useState<number>(0);
   const [isUnique, setIsUnique] = useState<boolean | null>(null);
+  console.log(isUnique);
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -40,6 +41,18 @@ export default function MintNFT() {
   // Generate a random token ID (number between 1 and 1,000,000)
   const generateRandomTokenId = (): number => {
     return Math.floor(Math.random() * 1_000_000) + 1;
+  };
+
+  const handleReset = () => {
+    setFormData({
+      name: "",
+      description: "",
+      logoUrl: "",
+    });
+    setTokenId(generateRandomTokenId());
+    setIsSuccess(false);
+    setStoredNFT(null);
+    setError(null);
   };
 
   const { data, refetch, isLoading } = useReadContract({
@@ -120,12 +133,17 @@ export default function MintNFT() {
       });
 
       console.log("Minting successful, receipt:", receipt);
-    } catch (err: any) {
-      console.error("Error during minting process:", err);
-      setError(err.message || "An error occurred while minting the NFT.");
+      setIsSuccess(true);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error during minting process:", err);
+        setError(err.message || "An error occurred while minting the NFT.");
+      } else {
+        console.error("Unexpected error:", err);
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setLoading(false);
-      setIsSuccess(true);
     }
   };
 
@@ -150,16 +168,22 @@ export default function MintNFT() {
               <div>
                 <p className="text-sm text-slate-400">NFT Name</p>
                 <p className="text-lg font-semibold text-white">
-                  {storedNFT.name}
+                  {storedNFT ? storedNFT.name : "NFT Name Unavailable"}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-slate-400">Description</p>
-                <p className="text-white">{storedNFT.description}</p>
+                <p className="text-white">
+                  {storedNFT
+                    ? storedNFT.description
+                    : "Description Unavailable"}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-slate-400">NFT ID</p>
-                <p className="font-mono text-purple-400">{storedNFT.nftId}</p>
+                <p className="font-mono text-purple-400">
+                  {storedNFT ? storedNFT.nftId : "NftId Unavailable"}
+                </p>
               </div>
             </div>
           </div>
@@ -172,7 +196,7 @@ export default function MintNFT() {
               Share
             </Button>
             <Button
-              // onClick={handleReset}
+              onClick={handleReset}
               className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white"
             >
               Mint Another
